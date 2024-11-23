@@ -1,0 +1,9 @@
+{
+  "/not-found": "app/not-found.js",
+  "/shop/page": "app/shop/page.js",
+  "/news/page": "app/news/page.js",
+  "/leagues/page": "app/leagues/page.js",
+  "/match/[id]/page": "app/match/[id]/page.js",
+  "/page": "app/page.js",
+  "/favourite/page": "app/favourite/page.js"
+}
