@@ -8,7 +8,7 @@ export default function BottomNav() {
     { icon: <FaTrophy />, label: 'Leagues', href: '/leagues' },
     { icon: <FaStar />, label: 'Favourite', href: '/favourite' },
     { icon: <FaShoppingCart />, label: 'Shop', href: '/shop' },
-    { icon: <FaBars />, label: 'More', href: '/more' },
+    { icon: <FaBars />, label: 'More', href: '/' },
   ]
 
   return (
