@@ -7,11 +7,9 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
-    { label: 'Matches', href: '/' },
-    { label: 'News', href: '/news' },
-    { label: 'Leagues', href: '/leagues' },
-    { label: 'Favourites', href: '/favourite' },
-    { label: 'Shop', href: '/shop' },
+    { label: 'Dashboard', href: '/admin/dashboard' },
+  { label: 'Team Management', href: '/admin/team-management' },
+  { label: 'Shop Management', href: '/admin/shop-management' },
   ]
 
   return (

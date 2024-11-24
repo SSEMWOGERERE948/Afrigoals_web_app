@@ -12,6 +12,53 @@ import { StadiumMap } from "@/components/stadium-map"
 export default function MatchDetails({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState("lineup")
 
+  // Mock data for teams and players
+  const homeTeam = {
+    name: "Vipers",
+    players: [
+      { name: "John Doe", shirtNumber: 1, position: "GK", image: "/images/allan.jpeg" },
+      { name: "Jane Smith", shirtNumber: 2, position: "DEF", image: "/images/allan.jpeg" },
+      { name: "Mike Johnson", shirtNumber: 3, position: "DEF", image: "/images/allan.jpeg" },
+      { name: "Sarah Brown", shirtNumber: 4, position: "DEF", image: "/images/allan.jpeg" },
+      { name: "Tom Wilson", shirtNumber: 5, position: "DEF", image: "/images/allan.jpeg" },
+      { name: "Emily Davis", shirtNumber: 6, position: "MID", image: "/images/allan.jpeg" },
+      { name: "Chris Lee", shirtNumber: 7, position: "MID", image: "/images/allan.jpeg" },
+      { name: "Alex Taylor", shirtNumber: 8, position: "MID", image: "/images/allan.jpeg" },
+      { name: "Sam White", shirtNumber: 9, position: "MID", image: "/images/allan.jpeg" },
+      { name: "Pat Green", shirtNumber: 10, position: "FWD", image: "/images/allan.jpeg" },
+      { name: "Jordan Black", shirtNumber: 11, position: "FWD", image: "/images/allan.jpeg" },
+    ]
+  }
+
+  const awayTeam = {
+    name: "Sc Villa",
+    players: [
+      { name: "Bob Johnson", shirtNumber: 1, position: "GK", image: "/images/allan.jpeg" },
+      { name: "Alice Brown", shirtNumber: 2, position: "DEF", image: "/images/allan.jpeg" },
+      { name: "Charlie Davis", shirtNumber: 3, position: "DEF", image: "/images/allan.jpeg" },
+      { name: "David Wilson", shirtNumber: 4, position: "DEF", image: "/images/allan.jpeg" },
+      { name: "Eva Martinez", shirtNumber: 5, position: "DEF", image: "/images/allan.jpeg" },
+      { name: "Frank Thomas", shirtNumber: 6, position: "MID", image: "/images/allan.jpeg" },
+      { name: "Grace Lee", shirtNumber: 7, position: "MID", image: "/images/allan.jpeg" },
+      { name: "Henry Clark", shirtNumber: 8, position: "MID", image: "/images/allan.jpeg" },
+      { name: "Ivy Robinson", shirtNumber: 9, position: "MID", image: "/images/allan.jpeg" },
+      { name: "Jack Wright", shirtNumber: 10, position: "FWD", image: "/images/allan.jpeg" },
+      { name: "Kate Brown", shirtNumber: 11, position: "FWD", image: "/images/allan.jpeg" },
+    ]
+  }
+
+  const teams = [
+    { name: "Vipers", gd: 0, points: 0, logo: "/images/vipers.jpeg" },
+    { name: "KCCA", gd: 0, points: 0, logo: "/images/kcca.png" },
+    { name: "Maroons", gd: 0, points: 0, logo: "/images/maroons.png" },
+    { name: "URA", gd: 0, points: 0, logo: "/images/ura.png" },
+    { name: "Express", gd: 0, points: 0, logo: "/images/express.png" },
+    { name: "Wakiso Giants", gd: 0, points: 0, logo: "/images/wakiso.png" },
+    { name: "Gaddafi", gd: 0, points: 0, logo: "/images/gaddafi.png" },
+    { name: "Busoga", gd: 0, points: 0, logo: "/images/busoga.png" },
+    { name: "Sc Villa", gd: 0, points: 0, logo: "/images/villa_logo.png" },
+  ]
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Match Score Section */}
@@ -59,7 +106,7 @@ export default function MatchDetails({ params }: { params: { id: string } }) {
         </TabsList>
         <TabsContent value="lineup" className="m-0">
           <div className="bg-white p-4">
-            <SoccerField />
+            <SoccerField homeTeam={homeTeam} awayTeam={awayTeam} />
           </div>
         </TabsContent>
         <TabsContent value="table" className="m-0">
@@ -125,14 +172,4 @@ export default function MatchDetails({ params }: { params: { id: string } }) {
     </div>
   )
 }
-
-const teams = [
-    { name: "The Cranes", gd: 0, points: 0, logo: "/images/uganda_cranes.png" },
-    { name: "Vipers", gd: 0, points: 0, logo: "/images/vipers.jpeg" },
-    { name: "KCCA", gd: 0, points: 0, logo: "/images/kcca.png" },
-    { name: "URA", gd: 0, points: 0, logo: "/images/ura.png" },
-    { name: "Express", gd: 0, points: 0, logo: "/images/express.jpeg" },
-    { name: "SC Villa", gd: 0, points: 0, logo: "/images/villa_logo.png" },
-  ];
-  
 
