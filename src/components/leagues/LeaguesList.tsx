@@ -1,105 +1,83 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 
-export default function MatchesList() {
-  const router = useRouter();
-
-  const matches = [
-    {
-      league: {
-        name: "StarTimes Uganda Premier League",
-        logo: "/images/upl.jpeg", // League logo
-      },
-      matches: [
-        {
-          id: "1",
-          homeTeam: { name: "Maroons", logo: "/images/maroons.png" },
-          awayTeam: { name: "Wakiso Giants", logo: "/images/wakiso_giants.png" },
-          time: "17:30",
-        },
-        {
-          id: "2",
-          homeTeam: { name: "KCCA", logo: "/images/kcca.png" },
-          awayTeam: { name: "Gaddafi", logo: "/images/gaddafi.png" },
-          time: "18:00",
-        },
-        {
-          id: "3",
-          homeTeam: { name: "URA", logo: "/images/ura.png" },
-          awayTeam: { name: "Busoga", logo: "/images/busoga.png" },
-          time: "18:00",
-        },
-        {
-          id: "4",
-          homeTeam: { name: "Express", logo: "/images/express.png" },
-          awayTeam: { name: "Mbarara", logo: "/images/mbarara.png" },
-          time: "18:30",
-        },
-        {
-          id: "5",
-          homeTeam: { name: "Vipers", logo: "/images/vipers.png" },
-          awayTeam: { name: "Sc Villa", logo: "/images/sc_villa.png" },
-          time: "18:30",
-        },
-      ],
-    },
+export default function LeaguesList() {
+  const allLeagues: { id: string; name: string; logo: string }[] = [
+    { id: "upl", name: "StarTimes Uganda Premier League", logo: "/images/upl.jpeg" },
+    { id: "big-league", name: "Fufa Big League", logo: "/images/fufa_big_league.jpeg" },
+    { id: "regional-league", name: "Regional Leagues", logo: "/images/regional_league.jpeg" },
+    { id: "women-super-league", name: "Fufa Women Super League", logo: "/images/women_super_league.jpeg" },
   ];
+
+  const [followedLeagues, setFollowedLeagues] = useState<
+    { id: string; name: string; logo: string }[]
+  >([
+    { id: "upl", name: "StarTimes Uganda Premier League", logo: "/images/upl.jpeg" },
+  ]);
+
+  const followLeague = (league: { id: string; name: string; logo: string }) => {
+    if (!followedLeagues.some((l) => l.id === league.id)) {
+      setFollowedLeagues([...followedLeagues, league]);
+    }
+  };
+
+  const unfollowLeague = (leagueId: string) => {
+    setFollowedLeagues(followedLeagues.filter((league) => league.id !== leagueId));
+  };
 
   return (
     <div className="space-y-6">
-      {matches.map((leagueData) => (
-        <div key={leagueData.league.name}>
-          {/* League Logo and Name */}
-          <div className="flex items-center space-x-2 mb-4">
-            <img
-              src={leagueData.league.logo}
-              alt={leagueData.league.name}
-              className="w-6 h-6"
-            />
-            <h2 className="font-semibold">{leagueData.league.name}</h2>
-          </div>
+      <h1 className="text-2xl font-bold mb-4">Manage Followed Leagues</h1>
 
-          {/* Match Cards */}
-          <div className="space-y-3">
-            {leagueData.matches.map((match) => (
-              <Card
-                key={match.id}
-                className="cursor-pointer hover:bg-gray-50"
-                onClick={() => router.push(`/match/${match.id}`)}
-              >
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-center">
-                    {/* Home Team */}
-                    <div className="flex items-center space-x-2">
-                      <img
-                        src={match.homeTeam.logo}
-                        alt={match.homeTeam.name}
-                        className="w-6 h-6"
-                      />
-                      <span className="font-medium">{match.homeTeam.name}</span>
-                    </div>
-
-                    {/* Match Time */}
-                    <span className="text-sm text-muted-foreground">{match.time}</span>
-
-                    {/* Away Team */}
-                    <div className="flex items-center space-x-2">
-                      <img
-                        src={match.awayTeam.logo}
-                        alt={match.awayTeam.name}
-                        className="w-6 h-6"
-                      />
-                      <span className="font-medium">{match.awayTeam.name}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+      <div>
+        <h2 className="text-xl font-semibold mb-2">Leagues You Follow</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {followedLeagues.map((league) => (
+            <Card key={league.id} className="relative">
+              <CardContent className="p-4 flex items-center space-x-4">
+                <img
+                  src={league.logo}
+                  alt={league.name}
+                  className="w-12 h-12 rounded-md"
+                />
+                <span className="font-medium">{league.name}</span>
+                <button
+                  onClick={() => unfollowLeague(league.id)}
+                  className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                >
+                  Unfollow
+                </button>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-      ))}
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold mb-2">Available Leagues</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {allLeagues.map((league) => (
+            <Card
+              key={league.id}
+              className={`cursor-pointer hover:bg-gray-50 ${
+                followedLeagues.some((l) => l.id === league.id) ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              onClick={() => followLeague(league)}
+            >
+              <CardContent className="p-4 flex items-center space-x-4">
+                <img
+                  src={league.logo}
+                  alt={league.name}
+                  className="w-12 h-12 rounded-md"
+                />
+                <span className="font-medium">{league.name}</span>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

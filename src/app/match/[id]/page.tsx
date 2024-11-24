@@ -48,16 +48,13 @@ export default function MatchDetails({ params }: { params: { id: string } }) {
   }
 
   const teams = [
+    { name: "The Cranes", gd: 0, points: 0, logo: "/images/uganda_cranes.png" },
     { name: "Vipers", gd: 0, points: 0, logo: "/images/vipers.jpeg" },
     { name: "KCCA", gd: 0, points: 0, logo: "/images/kcca.png" },
-    { name: "Maroons", gd: 0, points: 0, logo: "/images/maroons.png" },
     { name: "URA", gd: 0, points: 0, logo: "/images/ura.png" },
-    { name: "Express", gd: 0, points: 0, logo: "/images/express.png" },
-    { name: "Wakiso Giants", gd: 0, points: 0, logo: "/images/wakiso.png" },
-    { name: "Gaddafi", gd: 0, points: 0, logo: "/images/gaddafi.png" },
-    { name: "Busoga", gd: 0, points: 0, logo: "/images/busoga.png" },
-    { name: "Sc Villa", gd: 0, points: 0, logo: "/images/villa_logo.png" },
-  ]
+    { name: "Express", gd: 0, points: 0, logo: "/images/express.jpeg" },
+    { name: "SC Villa", gd: 0, points: 0, logo: "/images/villa_logo.png" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">

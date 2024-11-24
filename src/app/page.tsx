@@ -1,4 +1,4 @@
-import MatchesList from '@/components/matches/MatchesList'
+import MatchesList from '@/components/leagues/MatchesList'
 import DateNavigation from '@/components/matches/DateNavigation'
 
 export default function Home() {
