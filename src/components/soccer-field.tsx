@@ -11,6 +11,7 @@ interface Player {
 interface Team {
   name: string;
   players: Player[];
+  formation: keyof typeof STANDARD_FORMATIONS;
 }
 
 interface SoccerFieldProps {
@@ -18,26 +19,176 @@ interface SoccerFieldProps {
   awayTeam: Team;
 }
 
+interface FormationConfig {
+  name: string;
+  positions: {
+    DEF: number;
+    MID: number;
+    FWD: number;
+  };
+  description?: string;
+}
+
+const STANDARD_FORMATIONS: { [key: string]: FormationConfig } = {
+  "4-4-2": {
+    name: "4-4-2",
+    positions: {
+      DEF: 4,
+      MID: 4,
+      FWD: 2
+    },
+    description: "Classic balanced formation with two strikers"
+  },
+  "4-3-3": {
+    name: "4-3-3",
+    positions: {
+      DEF: 4,
+      MID: 3,
+      FWD: 3
+    },
+    description: "Attacking formation with three forwards"
+  },
+  "4-2-3-1": {
+    name: "4-2-3-1",
+    positions: {
+      DEF: 4,
+      MID: 5,
+      FWD: 1
+    },
+    description: "Modern formation with double pivot"
+  },
+  "3-5-2": {
+    name: "3-5-2",
+    positions: {
+      DEF: 3,
+      MID: 5,
+      FWD: 2
+    },
+    description: "Formation with wing-backs and three center-backs"
+  },
+  "3-4-3": {
+    name: "3-4-3",
+    positions: {
+      DEF: 3,
+      MID: 4,
+      FWD: 3
+    },
+    description: "Attacking formation with three forwards and back three"
+  },
+  "5-3-2": {
+    name: "5-3-2",
+    positions: {
+      DEF: 5,
+      MID: 3,
+      FWD: 2
+    },
+    description: "Defensive formation with five at the back"
+  },
+  "4-5-1": {
+    name: "4-5-1",
+    positions: {
+      DEF: 4,
+      MID: 5,
+      FWD: 1
+    },
+    description: "Defensive formation with packed midfield"
+  }
+};
+
+const calculateHorizontalPosition = (index: number, total: number) => {
+  return `${(index / total) * 100}%`;
+};
+
 export const SoccerField: React.FC<SoccerFieldProps> = ({ homeTeam, awayTeam }) => {
+  const getFormationConfig = (formationKey: keyof typeof STANDARD_FORMATIONS): FormationConfig => {
+    return STANDARD_FORMATIONS[formationKey];
+  };
+
+  const getPositionCoordinates = (
+    position: string,
+    index: number,
+    isHomeTeam: boolean,
+    formation: FormationConfig
+  ) => {
+    const getMidfielderPosition = (index: number, total: number) => {
+      if (total === 5) {
+        if (index < 2) {
+          return {
+            top: isHomeTeam ? '70%' : '30%',
+            left: calculateHorizontalPosition(index, 2)
+          };
+        }
+        return {
+          top: isHomeTeam ? '60%' : '40%',
+          left: calculateHorizontalPosition(index - 2, 3)
+        };
+      }
+      
+      return {
+        top: isHomeTeam ? '65%' : '35%',
+        left: calculateHorizontalPosition(index, total)
+      };
+    };
+
+    const positions = {
+      GK: {
+        top: isHomeTeam ? '90%' : '10%',
+        left: '50%'
+      },
+      DEF: {
+        top: isHomeTeam ? '75%' : '25%',
+        left: calculateHorizontalPosition(index, formation.positions.DEF)
+      },
+      MID: getMidfielderPosition(index, formation.positions.MID),
+      FWD: {
+        top: isHomeTeam ? '55%' : '45%',
+        left: calculateHorizontalPosition(index, formation.positions.FWD)
+      }
+    };
+
+    return positions[position as keyof typeof positions] || positions.GK;
+  };
+
   const renderPlayer = (player: Player, isHomeTeam: boolean, index: number) => {
     const positions = {
-      GK: { top: isHomeTeam ? '90%' : '10%', left: '50%' },
+      GK: { 
+        top: isHomeTeam ? '90%' : '10%', 
+        left: '50%' 
+      },
       DEF: { 
-        top: isHomeTeam ? '75%' : '25%', 
-        left: `${index * 25 + 12.5}%`
+        top: isHomeTeam ? '75%' : '25%',
+        left: (index: number, total: number) => {
+          if (total === 4) return `${20 + index * 20}%`
+          if (total === 3) return `${25 + index * 25}%`
+          return '50%'
+        }
       },
       MID: { 
-        top: isHomeTeam ? '60%' : '40%', 
-        left: `${index * 25 + 12.5}%`
+        top: isHomeTeam ? '65%' : '35%',
+        left: (index: number, total: number) => {
+          if (total === 3) return `${25 + index * 25}%`
+          if (total === 4) return `${20 + index * 20}%`
+          return '50%'
+        }
       },
       FWD: { 
-        top: isHomeTeam ? '40%' : '60%', 
-        left: `${index * 33 + 16.5}%`
+        top: isHomeTeam ? '55%' : '45%',
+        left: (index: number, total: number) => {
+          if (total === 3) return `${25 + index * 25}%`
+          if (total === 2) return `${33 + index * 33}%`
+          if (total === 1) return '50%'
+          return '50%'
+        }
       },
     }
 
     const positionKey = player.position as keyof typeof positions
-    const { top, left } = positions[positionKey] || { top: '50%', left: '50%' }
+    const positionPlayers = homeTeam.players.filter(p => p.position === player.position).length
+    const left = typeof positions[positionKey].left === 'function' 
+      ? positions[positionKey].left(index, positionPlayers)
+      : positions[positionKey].left
+    
+    const { top } = positions[positionKey]
     const color = isHomeTeam ? 'text-blue-500' : 'text-red-500'
 
     return (

@@ -1,13 +1,9 @@
 {
-  "/_not-found": "app/_not-found.js",
-  "/admin/shop-management/page": "app/admin/shop-management/page.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/admin/team-management/page": "app/admin/team-management/page.js",
-  "/leagues/page": "app/leagues/page.js",
-  "/favourite/page": "app/favourite/page.js",
-  "/match/[id]/page": "app/match/[id]/page.js",
-  "/news/page": "app/news/page.js",
+  "/not-found": "app/not-found.js",
   "/page": "app/page.js",
+  "/match/[id]/page": "app/match/[id]/page.js",
+  "/leagues/page": "app/leagues/page.js",
+  "/admin/team-management/page": "app/admin/team-management/page.js",
+  "/admin/shop-management/page": "app/admin/shop-management/page.js",
   "/shop/page": "app/shop/page.js"
 }

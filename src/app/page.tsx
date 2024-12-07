@@ -1,26 +1,67 @@
+"use client"
+
+import { useState } from 'react'
 import MatchesList from '@/components/leagues/MatchesList'
 import DateNavigation from '@/components/matches/DateNavigation'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Search, CalendarIcon } from 'lucide-react'
 
 export default function Home() {
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+    // Implement search logic here
+    console.log('Searching for:', query)
+  }
+
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">AfriGoals</h1>
+        <h1 className="text-3xl font-bold">AfriGoals</h1>
         <div className="flex space-x-4">
-          <button className="p-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </button>
-          <button className="p-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="Select date">
+                <CalendarIcon className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[320px] sm:w-[400px]">
+              <div className="flex flex-col space-y-4 p-2">
+                <h2 className="text-lg font-semibold">Select Date</h2>
+                <Calendar
+                  value={selectedDate}
+                  onChange={(date) => setSelectedDate(date as Date)}
+                  className="rounded-md border shadow"
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
+          <Button variant="ghost" size="icon" onClick={() => setIsSearchOpen(!isSearchOpen)} aria-label="Search">
+            <Search className="h-6 w-6" />
+          </Button>
         </div>
       </div>
-      <DateNavigation />
-      <MatchesList />
+      {isSearchOpen && (
+        <div className="mb-6">
+          <Input
+            type="search"
+            placeholder="Search matches..."
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
+            className="w-full"
+          />
+        </div>
+      )}
+      <DateNavigation selectedDate={selectedDate} onDateChange={setSelectedDate} />
+      <MatchesList searchQuery={searchQuery} selectedDate={selectedDate} />
     </div>
   )
 }
+

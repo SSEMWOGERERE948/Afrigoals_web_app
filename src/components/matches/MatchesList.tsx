@@ -2,25 +2,54 @@
 
 import { useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
+import { isSameDay } from 'date-fns'
 
-export default function MatchesList() {
+interface Match {
+  id: string
+  homeTeam: string
+  awayTeam: string
+  time: string
+  date: Date
+}
+
+interface League {
+  league: string
+  matches: Match[]
+}
+
+interface MatchesListProps {
+  searchQuery: string
+  selectedDate: Date | undefined
+}
+
+export default function MatchesList({ searchQuery, selectedDate }: MatchesListProps) {
   const router = useRouter()
-  const matches = [
+  const matches: League[] = [
     {
       league: 'StarTimes Uganda Premier League',
       matches: [
-        { id: '1', homeTeam: 'Maroons', awayTeam: 'Wakiso Giants', time: '17:30' },
-        { id: '2', homeTeam: 'KCCA', awayTeam: 'Gaddafi', time: '18:00' },
-        { id: '3', homeTeam: 'URA', awayTeam: 'Busoga', time: '18:00' },
-        { id: '4', homeTeam: 'Express', awayTeam: 'Mbarara', time: '18:30' },
-        { id: '5', homeTeam: 'Vipers', awayTeam: 'Sc Villa', time: '18:30' },
+        { id: '1', homeTeam: 'Maroons', awayTeam: 'Wakiso Giants', time: '17:30', date: new Date() },
+        { id: '2', homeTeam: 'KCCA', awayTeam: 'Gaddafi', time: '18:00', date: new Date() },
+        { id: '3', homeTeam: 'URA', awayTeam: 'Busoga', time: '18:00', date: new Date() },
+        { id: '4', homeTeam: 'Express', awayTeam: 'Mbarara', time: '18:30', date: new Date() },
+        { id: '5', homeTeam: 'Vipers', awayTeam: 'Sc Villa', time: '18:30', date: new Date() },
       ]
     }
   ]
 
+  const filteredMatches = matches.map(league => ({
+    ...league,
+    matches: league.matches.filter(match => 
+      (searchQuery === '' || 
+       match.homeTeam.toLowerCase().includes(searchQuery.toLowerCase()) || 
+       match.awayTeam.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (selectedDate ? isSameDay(match.date, selectedDate) : true)
+    )
+  })).filter(league => league.matches.length > 0)
+
   return (
     <div className="space-y-6">
-      {matches.map((league) => (
+      {filteredMatches.map((league) => (
         <div key={league.league}>
           <div className="flex items-center space-x-2 mb-4">
             <img
@@ -34,7 +63,7 @@ export default function MatchesList() {
             {league.matches.map((match) => (
               <Card
                 key={`${match.homeTeam}-${match.awayTeam}`}
-                className="cursor-pointer hover:bg-gray-50"
+                className="cursor-pointer hover:bg-accent"
                 onClick={() => router.push(`/match/${match.id}`)}
               >
                 <CardContent className="p-4">

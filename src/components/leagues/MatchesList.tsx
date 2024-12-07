@@ -3,7 +3,12 @@
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 
-export default function MatchesList() {
+interface MatchesListProps {
+  searchQuery: string;
+  selectedDate: Date | undefined;
+}
+
+export default function MatchesList({ searchQuery, selectedDate }: MatchesListProps) {
   const router = useRouter();
 
   const matches = [

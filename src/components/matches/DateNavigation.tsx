@@ -1,19 +1,40 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { format, addDays, subDays, isSameDay } from 'date-fns'
 
-export default function DateNavigation() {
-  const dates = ['Yesterday', 'Today', 'Tomorrow', 'Thu 16']
-  const [selectedIndex, setSelectedIndex] = useState(1) // Default to 'Today'
+interface DateNavigationProps {
+  selectedDate: Date | undefined
+  onDateChange: (date: Date) => void
+}
+
+export default function DateNavigation({ selectedDate, onDateChange }: DateNavigationProps) {
+  const [dates, setDates] = useState<Date[]>([])
+
+  useEffect(() => {
+    if (selectedDate) {
+      const newDates = [
+        subDays(selectedDate, 1),
+        selectedDate,
+        addDays(selectedDate, 1),
+        addDays(selectedDate, 2),
+      ]
+      setDates(newDates)
+    }
+  }, [selectedDate])
 
   const handlePrevious = () => {
-    setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev))
+    if (selectedDate) {
+      onDateChange(subDays(selectedDate, 1))
+    }
   }
 
   const handleNext = () => {
-    setSelectedIndex((prev) => (prev < dates.length - 1 ? prev + 1 : prev))
+    if (selectedDate) {
+      onDateChange(addDays(selectedDate, 1))
+    }
   }
 
   return (
@@ -22,7 +43,6 @@ export default function DateNavigation() {
         variant="ghost"
         size="icon"
         onClick={handlePrevious}
-        disabled={selectedIndex === 0}
         aria-label="Previous date"
       >
         <ChevronLeft className="h-4 w-4" />
@@ -30,17 +50,20 @@ export default function DateNavigation() {
       <div className="flex space-x-6">
         {dates.map((date, index) => (
           <Button
-            key={date}
+            key={date.toISOString()}
             variant="ghost"
             className={`pb-2 px-1 ${
-              index === selectedIndex
+              selectedDate && isSameDay(date, selectedDate)
                 ? 'border-b-2 border-primary text-primary'
                 : 'text-muted-foreground'
             }`}
-            onClick={() => setSelectedIndex(index)}
-            aria-pressed={index === selectedIndex}
+            onClick={() => onDateChange(date)}
+            aria-pressed={selectedDate && isSameDay(date, selectedDate)}
           >
-            {date}
+            {index === 0 && 'Yesterday'}
+            {index === 1 && 'Today'}
+            {index === 2 && 'Tomorrow'}
+            {index === 3 && format(date, 'EEE dd')}
           </Button>
         ))}
       </div>
@@ -48,7 +71,6 @@ export default function DateNavigation() {
         variant="ghost"
         size="icon"
         onClick={handleNext}
-        disabled={selectedIndex === dates.length - 1}
         aria-label="Next date"
       >
         <ChevronRight className="h-4 w-4" />
