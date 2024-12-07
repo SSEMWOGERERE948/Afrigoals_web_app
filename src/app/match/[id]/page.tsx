@@ -27,7 +27,8 @@ export default function MatchDetails({ params }: { params: { id: string } }) {
       { name: "Sam White", shirtNumber: 9, position: "MID", image: "/images/allan.jpeg" },
       { name: "Pat Green", shirtNumber: 10, position: "FWD", image: "/images/allan.jpeg" },
       { name: "Jordan Black", shirtNumber: 11, position: "FWD", image: "/images/allan.jpeg" },
-    ]
+    ],
+    formation: "4-4-2"
   }
 
   const awayTeam = {
@@ -44,7 +45,8 @@ export default function MatchDetails({ params }: { params: { id: string } }) {
       { name: "Ivy Robinson", shirtNumber: 9, position: "MID", image: "/images/allan.jpeg" },
       { name: "Jack Wright", shirtNumber: 10, position: "FWD", image: "/images/allan.jpeg" },
       { name: "Kate Brown", shirtNumber: 11, position: "FWD", image: "/images/allan.jpeg" },
-    ]
+    ],
+    formation: "4-3-3"
   }
 
   const teams = [

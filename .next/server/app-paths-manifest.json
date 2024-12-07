@@ -1,8 +1,6 @@
 {
-  "/not-found": "app/not-found.js",
   "/page": "app/page.js",
   "/match/[id]/page": "app/match/[id]/page.js",
-  "/leagues/page": "app/leagues/page.js",
   "/admin/team-management/page": "app/admin/team-management/page.js",
   "/admin/shop-management/page": "app/admin/shop-management/page.js",
   "/shop/page": "app/shop/page.js"
